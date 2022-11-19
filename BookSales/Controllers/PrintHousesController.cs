@@ -73,6 +73,8 @@ namespace BookSales.Controllers
 
             _context.PrintHouses.Update(printHouse);
             await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
         //Get delete
