@@ -73,11 +73,37 @@ namespace BookSales.Controllers
 
             _context.PrintHouses.Update(printHouse);
             await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
         //Get delete
-        //Post delete
-        
+        public async Task<IActionResult> Delete(int id)
+        {
+            var printHouse = await _context.PrintHouses.FirstOrDefaultAsync(p => p.Id == id);
+            if (printHouse is null)
+            {
+                return View("NotFound");
+            }
 
+            return View(printHouse);
+        }
+
+        //Post delete
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var printHouse = await _context.PrintHouses.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (printHouse is null)
+            {
+                return View("NotFound");
+            }
+
+            _context.PrintHouses.Remove(printHouse);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
     }
 }
