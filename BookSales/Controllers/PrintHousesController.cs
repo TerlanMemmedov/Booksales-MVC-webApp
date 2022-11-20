@@ -1,4 +1,6 @@
 ﻿using BookSales.Data;
+using BookSales.Data.Base;
+using BookSales.Data.Services;
 using BookSales.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,23 +9,23 @@ namespace BookSales.Controllers
 {
     public class PrintHousesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IPrintHousesService _service;
 
-        public PrintHousesController(AppDbContext context)
+        public PrintHousesController(IPrintHousesService service)
         {
-            _context = context;
+            _service = service;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            var allPrintHouses = await _context.PrintHouses.ToListAsync();
-            return View(allPrintHouses);
+            var printHouses = await _service.GetAllAsync();
+            return View(printHouses);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var printHouse = await _context.PrintHouses.FirstOrDefaultAsync(p => p.Id == id);
+            var printHouse = await _service.GetByIdAsync(id);
             if (printHouse is null)
             {
                 return View("NotFound");
@@ -46,20 +48,18 @@ namespace BookSales.Controllers
                 return View(printHouse);
             }
 
-            await _context.PrintHouses.AddAsync(printHouse);
-            await _context.SaveChangesAsync();
+            await _service.AddAsync(printHouse);
             return RedirectToAction("Index");
         }
 
 
         public async Task<IActionResult> Edit(int id)
         {
-            var printHouse = await _context.PrintHouses.FirstOrDefaultAsync(p => p.Id == id);
+            var printHouse = await _service.GetByIdAsync(id);
             if (printHouse is null)
             {
                 return View("NotFound");
             }
-
             return View(printHouse);
         }
 
@@ -71,21 +71,18 @@ namespace BookSales.Controllers
                 return View(printHouse);
             }
 
-            _context.PrintHouses.Update(printHouse);
-            await _context.SaveChangesAsync();
-
+            await _service.UpdateAsync(id, printHouse);
             return RedirectToAction("Index");
         }
 
         //Get delete
         public async Task<IActionResult> Delete(int id)
         {
-            var printHouse = await _context.PrintHouses.FirstOrDefaultAsync(p => p.Id == id);
+            var printHouse = await _service.GetByIdAsync(id);
             if (printHouse is null)
             {
                 return View("NotFound");
             }
-
             return View(printHouse);
         }
 
@@ -93,16 +90,14 @@ namespace BookSales.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var printHouse = await _context.PrintHouses.FirstOrDefaultAsync(p => p.Id == id);
+            var printHouse = await _service.GetByIdAsync(id);
 
             if (printHouse is null)
             {
                 return View("NotFound");
             }
 
-            _context.PrintHouses.Remove(printHouse);
-            await _context.SaveChangesAsync();
-
+            await _service.DeleteAsync(id);
             return RedirectToAction("Index");
         }
     }
