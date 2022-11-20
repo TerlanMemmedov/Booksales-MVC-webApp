@@ -1,9 +1,9 @@
 using BookSales.Data;
+using BookSales.Data.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Services will be added
 
 
 //DbContext for SQL
@@ -11,18 +11,19 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-
-
-
-
-
+//Services will be added
+builder.Services.AddScoped<IPrintHousesService, PrintHousesService>();
 
 
 
 //Configuration for Password will be added
+
+
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+
 
 
 var app = builder.Build();

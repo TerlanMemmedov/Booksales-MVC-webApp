@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BookSales.Data.Base;
+using System.ComponentModel.DataAnnotations;
 
-namespace BookSales.Models
+namespace BookSales.Models 
 {
-    public class PrintHouse //will be added IEntityBase for id
+    public class PrintHouse : IEntityBase
     {
         [Key]
         public int Id { get; set; }
