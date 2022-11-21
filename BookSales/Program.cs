@@ -13,6 +13,8 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
 
 //Services will be added
 builder.Services.AddScoped<IPrintHousesService, PrintHousesService>();
+builder.Services.AddScoped<ITranslatorsService, TranslatorsService>();
+builder.Services.AddScoped<IAuthorsService, AuthorsService>();
 
 
 
