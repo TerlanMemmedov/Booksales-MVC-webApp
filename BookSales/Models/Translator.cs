@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BookSales.Data.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookSales.Models
 {
-    public class Translator //will be added IEntityBase for id
+    public class Translator : IEntityBase
     {
         [Key]
         public int Id { get; set; }
